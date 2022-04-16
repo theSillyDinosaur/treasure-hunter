@@ -11,7 +11,7 @@ import sys
 import os
 
 def main():
-    maze = mz.Maze("data/small_maze.csv")
+    maze = mz.Maze("data/medium_maze.csv")
     point = score.Scoreboard("data/UID.csv", "team_NTUEE")
     interf = interface.interface()
     # TODO : Initialize necessary variables
@@ -27,7 +27,7 @@ def main():
             maze.nd_dict[N].print()
         print("1. BFS(3): ", maze.BFS(3))
         print("2. BFS_2(1, 6): ", maze.BFS_2(1, 6))
-        print("3. BFS_overall(2): ", maze.BFS_overall(2))
+        print("3. BFS_overall(8): ", maze.BFS_overall(8))
         
 
 if __name__ == '__main__':
