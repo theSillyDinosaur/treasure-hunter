@@ -42,6 +42,9 @@ class Maze:
         queue.append(self.nd_dict[nd].index)
         start = 0
 
+        for N in self.nd_dict:
+            self.nd_dict[N].Successors = [-1]
+        
         while queue:
             s = queue.pop(0) 
             if self.nd_dict[s].isTerminal() and start == 1:
@@ -81,8 +84,6 @@ class Maze:
                     s = self.nd_dict[s].Successors[0]
                 route = [r for r in reversed(routeR)]
                 return route
-
-            start = 1
 
             for adjacent in self.nd_dict[s].neighbors: #find all adjacent node
                 if (adjacent not in visited) and (adjacent != -1):
