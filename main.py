@@ -9,6 +9,7 @@ import pandas
 import time
 import sys
 import os
+import threading
 
 def main():
     maze = mz.Maze("data/medium_maze.csv")
@@ -23,12 +24,17 @@ def main():
     elif (sys.argv[1] == '1'):
         print("Mode 1: Self-testing mode.")
         # TODO: You can write your code to test specific function.
-        for N in maze.nd_dict:
-            maze.nd_dict[N].print()
-        print("1. BFS(3): ", maze.BFS(3))
-        print("2. BFS_2(1, 6): ", maze.BFS_2(1, 6))
-        print("3. BFS_overall(8): ", maze.BFS_overall(8))
-        
+
+        readThread = threading.Thread(target=interf.ser.EndlessReadString)
+        readThread.daemon = True
+        readThread.start()
+        interf.ser.SerialWrite("rbfblbfbe")
+        while True:
+            a = ''
+            a = input()
+            interf.ser.SerialWrite(a)
+            if a == 'e':
+                break
 
 if __name__ == '__main__':
     main()

@@ -49,5 +49,9 @@ class bluetooth:
             return UID
         else:
             return 0
+    
+    def EndlessReadString(self):
+        while True:
+            print(self.SerialReadString(), end = "")
 
 
