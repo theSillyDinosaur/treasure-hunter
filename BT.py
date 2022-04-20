@@ -50,8 +50,18 @@ class bluetooth:
         else:
             return 0
     
-    def EndlessReadString(self):
+    def EndlessReadUID(self):
         while True:
-            print(self.SerialReadString(), end = "")
+            if self.ser.inWaiting():
+                UID = str("")
+                for i in range(9):
+                    while self.ser.inWaiting() == 0:
+                        sleep(0.01)
+                    if i == 8:
+                        self.ser.read(1).decode("utf-8")
+                        break
+                    UID += self.ser.read(1).decode("utf-8")
+                print(UID)
+                return UID
 
 

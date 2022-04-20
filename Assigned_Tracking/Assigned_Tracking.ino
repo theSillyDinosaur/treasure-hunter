@@ -39,7 +39,7 @@ void loop() {
       act = BT.read();
     }
     //RFID
-    //UID_detect();
+    UID_detect();
   
     //tracking
     for(int i = 0; i < 5; i++){

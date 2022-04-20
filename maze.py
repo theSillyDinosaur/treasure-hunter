@@ -90,7 +90,43 @@ class Maze:
                     self.nd_dict[adjacent].Successors[0] = s
                     visited.append(adjacent)
                     queue.append(adjacent)
-        
+    
+    def route_to_cmd(self,route):
+        cmd = str()
+        car_d = 0 #北南西東 轉成=>北西南東
+
+        for i in range(0,4):
+            if(self.nd_dict[route[0]].neighbors[i] == route[1]):
+                if(i==0 or i ==3):
+                    car_d = i
+                elif(i==1):
+                    car_d = 2
+                elif(i==2):
+                    car_d = 1
+
+        for j in range (len(route)-1): #確定第一步要f，要刪掉內
+            for i in range(0,4):
+                if(self.nd_dict[route[j]].neighbors[i] == route[j+1]):
+                    if(i==0 or i ==3):
+                        pro_d = i
+                    elif(i==1):
+                        pro_d = 2
+                    elif(i==2):
+                        pro_d = 1
+            
+            if(pro_d-car_d == 0): #同向 f
+                cmd += "f"
+            elif(pro_d-car_d == 1 or pro_d-car_d == -3): #左轉 l
+                cmd += "l"
+            elif(pro_d-car_d == 2 or pro_d-car_d == -2): #迴轉 b
+                cmd += "b"
+            elif(pro_d-car_d == 3 or pro_d-car_d == -1): #右轉 r
+                cmd += "r"
+            car_d = pro_d
+
+        return cmd
+
+
     def BFS_overall(self, nd):
         #step0: initialize termi as terminal and start node
         termi = [nd]
