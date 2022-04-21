@@ -63,9 +63,15 @@ void loop() {
     if(T_count == 0) LP = LP_pre;
     else LP /= T_count;
     LI += LP/(L_ratio+1);
+
+    //step3-1: normal tracking, setting of the MotorWriting()
+    if (T_count < 5){
+      if(LI > 0) MotorWriting(SI+norm_speed-LI, SI+norm_speed);
+      else MotorWriting(SI+norm_speed, SI+norm_speed+LI);
+    }
     
     // Step3-2: if we need to start next action...
-    if(T_count > 4){
+    else{
       MotorWriting(200, 200); // move into the node
       
       for(int i = 0; i < 25; i++) UID_detect(); // UID_detect() needs time, this row gives capability of reading UID in node
@@ -116,12 +122,6 @@ void loop() {
       LI = 0.;
       continue; // no need for tracking
     }//end of conduct cmd
-
-    //step3-1: normal tracking, setting of the MotorWriting()
-    if (T_count < 5){
-      if(LI > 0) MotorWriting(SI+norm_speed-LI, SI+norm_speed);
-      else MotorWriting(SI+norm_speed, SI+norm_speed+LI);
-    }
     
     LP_pre = LP;
   }
