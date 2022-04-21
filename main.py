@@ -13,14 +13,22 @@ import os
 import threading
 
 def main():
-    maze = mz.Maze("data/maze.csv")
-    point = score.Scoreboard("data/UID.csv", "team_NTUEE")
+    maze = mz.Maze("data/medium_maze.csv")
+    point = score.Scoreboard("data/UID.csv", "得分王者")
     interf = interface.interface()
     # TODO : Initialize necessary variables
 
     if (sys.argv[1] == '0'):
         print("Mode 0: for treasure-hunting")
         # TODO : for treasure-hunting, which encourages you to hunt as many scores as possible
+        route = maze.BFS_2(7, 12)
+        cmd = maze.route_to_cmd(route)
+        interf.ser.SerialWrite(cmd+'e')
+        print(route)
+        print(cmd)
+        while True:
+            interf.ser.EndlessReadUID(point)
+            
         
     elif (sys.argv[1] == '1'):
         print("Mode 1: Self-testing mode.")
@@ -34,19 +42,20 @@ def main():
         print("Mode 2: Car Checking")
         # TODO: You can write your code to test specific function.
 
-        readThread = threading.Thread(target=interf.ser.EndlessReadUID)
+        readThread = threading.Thread(target=interf.ser.EndlessReadUID(point, interf))
         readThread.daemon = True
         readThread.start()
         interf.ser.SerialWrite("rbfblbfbe")
-        while True:
-            a = ''
-            a = input()
-            interf.ser.SerialWrite(a)
-            if a == 'e':
-                break
-            if interf.ser.EndlessReadUID():
-                point.add_UID(interf.ser.EndlessReadUID())
-                print(point.getCurrentScore())
+    
+    elif (sys.argv[1] == '3'):
+        print("Mode 3: BFS mode.")
+        # TODO: You can write your code to test specific function.
+        route = maze.BFS_2(13, 26)
+        print(route)
+        cmd = maze.route_to_cmd(route)
+        print(cmd)
+
+
 
 if __name__ == '__main__':
     main()

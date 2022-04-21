@@ -104,7 +104,7 @@ class Maze:
                 elif(i==2):
                     car_d = 1
 
-        for j in range (len(route)-1): #確定第一步要f，要刪掉內
+        for j in range (1, len(route)-1): #確定第一步要f，要刪掉內
             for i in range(0,4):
                 if(self.nd_dict[route[j]].neighbors[i] == route[j+1]):
                     if(i==0 or i ==3):

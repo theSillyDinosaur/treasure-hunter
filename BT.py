@@ -50,7 +50,7 @@ class bluetooth:
         else:
             return 0
     
-    def EndlessReadUID(self):
+    def EndlessReadUID(self, point):
         while True:
             if self.ser.inWaiting():
                 UID = str("")
@@ -62,6 +62,8 @@ class bluetooth:
                         break
                     UID += self.ser.read(1).decode("utf-8")
                 print(UID)
+                point.add_UID(UID)
+                print(point.getCurrentScore())
                 return UID
 
 
