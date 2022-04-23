@@ -21,10 +21,9 @@ def main():
     if (sys.argv[1] == '0'):
         print("Mode 0: for treasure-hunting")
         # TODO : for treasure-hunting, which encourages you to hunt as many scores as possible
-        route = maze.BFS_2(7, 12)
+        route = maze.BFS_overall(7)
         cmd = maze.route_to_cmd(route)
         interf.ser.SerialWrite(cmd+'e')
-        print(route)
         print(cmd)
         while True:
             interf.ser.EndlessReadUID(point)
@@ -46,16 +45,6 @@ def main():
         readThread.daemon = True
         readThread.start()
         interf.ser.SerialWrite("rbfblbfbe")
-    
-    elif (sys.argv[1] == '3'):
-        print("Mode 3: BFS mode.")
-        # TODO: You can write your code to test specific function.
-        route = maze.BFS_2(13, 26)
-        print(route)
-        cmd = maze.route_to_cmd(route)
-        print(cmd)
-
-
 
 if __name__ == '__main__':
     main()
