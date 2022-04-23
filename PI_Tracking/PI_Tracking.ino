@@ -36,7 +36,7 @@ void loop() {
   char act = 'a'; // a means empty
   /* vvvvvvvvvv determining the ratio of response, need to modify vvvvvvvvvv */
   int SI_max = 150, norm_speed = 200;
-  int S_ratio = 5, L_ratio = 5, LP_coeff[5] = {norm_speed*2, norm_speed*2/3, 0, -norm_speed*2/3, -norm_speed*2};
+  int S_ratio = 2, L_ratio = 2, LP_coeff[5] = {norm_speed*2, norm_speed*2/3, 0, -norm_speed*2/3, -norm_speed*2};
   /* ^^^^^^^^^^ determining the ratio of response, need to modify ^^^^^^^^^^ */
   double LP = 0., LP_pre = 0., SI = SI_max / 2, LI = 0.; // initialize - right p, straight i, right i; set straight i to accelerate while being confident
 
@@ -79,34 +79,36 @@ void loop() {
     
     // Step3-2: if we need to start next action...
     if (T_count > 4){
-      MotorWriting(200, 200); // move into the node
-      
-      for(int i = 0; i < 25; i++) UID_detect(); // UID_detect() needs time, this row gives capability of reading UID in node
 
       // determine the next cmd
       if(act == 'f'){
-        delay(750);
-        act = 'a';
-        continue; // It doesn't need to reset the variable while it's going straight (except act)
+        MotorWriting(200, 200);
+        delay(800);
+        //act = 'a';
+        //continue; // It doesn't need to reset the variable while it's going straight (except act)
       }
       
       else if(act == 'r'){
-        MotorWriting(75, -75);
-        delay(800);
+        MotorWriting(255, 255);
+        delay(350);
+        MotorWriting(250, 0);
+        delay(400);
         while(digitalRead(TCRT_digitalPin[1]) == 0 && digitalRead(TCRT_digitalPin[2]) == 0 && digitalRead(TCRT_digitalPin[3]) == 0) delay(10);
       }
       
       else if(act == 'l'){
-        MotorWriting(-75, 75);
-        delay(800);
+        MotorWriting(255, 255);
+        delay(350);
+        MotorWriting(0, 250);
+        delay(400);
         while(digitalRead(TCRT_digitalPin[1]) == 0 && digitalRead(TCRT_digitalPin[2]) == 0 && digitalRead(TCRT_digitalPin[3]) == 0) delay(10);
       }
       
       else if(act == 'b'){
-        MotorWriting(0, 0);
-        delay(100);
-        MotorWriting(75, -75);
-        delay(1600);
+        MotorWriting(255, 255);
+        delay(350);
+        MotorWriting(100, -100);
+        delay(1000);
         while(digitalRead(TCRT_digitalPin[1]) == 0 && digitalRead(TCRT_digitalPin[2]) == 0 && digitalRead(TCRT_digitalPin[3]) == 0) delay(10);
       }
       else if(act == 'e'){
@@ -125,7 +127,7 @@ void loop() {
       act = 'a';
       LP = 0.;
       LP_pre = 0.;
-      SI = SI_max / 2;
+      SI = SI_max;
       LI = 0.;
       continue; // no need for tracking
     }//end of conduct cmd
