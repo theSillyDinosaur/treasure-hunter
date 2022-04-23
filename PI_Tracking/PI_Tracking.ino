@@ -35,21 +35,26 @@ void loop() {
   // initialization in every task
   char act = 'a'; // a means empty
   /* vvvvvvvvvv determining the ratio of response, need to modify vvvvvvvvvv */
-  int SI_max = 150, norm_speed = 150;
-  int S_ratio = 7, L_ratio = 7, LP_coeff[5] = {norm_speed, norm_speed/2, 0, -norm_speed/2, -norm_speed};
+  int SI_max = 150, norm_speed = 200;
+  int S_ratio = 5, L_ratio = 5, LP_coeff[5] = {norm_speed*2, norm_speed*2/3, 0, -norm_speed*2/3, -norm_speed*2};
   /* ^^^^^^^^^^ determining the ratio of response, need to modify ^^^^^^^^^^ */
   double LP = 0., LP_pre = 0., SI = SI_max / 2, LI = 0.; // initialize - right p, straight i, right i; set straight i to accelerate while being confident
 
   // start tracking
   while(act != 'z'){
     // initialization in any loop
+    Serial.write(act);
     int T_count = 0; // determine the situation, # of TCRT triggered
+    int Ls = 0; // set if there's side TCRT's triggered
     LP = 0.; // RP reset
     SI *= S_ratio/(S_ratio+1); // SI decaying
     LI *= L_ratio/(L_ratio+1); // RI decaying
 
     // Step1: communicating
-    if(BT.available() && act == 'a') act = BT.read(); // next action read
+    if(BT.available() && act == 'a'){
+      act = BT.read(); // next action read
+      Serial.write(act);
+    }
     UID_detect(); // RFID read and send
     
     // Step2: TCRT detecting, variable getting & I setting
@@ -58,6 +63,8 @@ void loop() {
         LP += LP_coeff[i]; // LP Step1: adding coefficient
         T_count++; // count # of TCRT triggered
         if(i == 2) SI += SI_max/(S_ratio+1); // straight adding
+        if(i == 1) Ls = 1;
+        if(i == 5) Ls = -1;
       }
     }
     if(T_count == 0) LP = LP_pre;
@@ -71,7 +78,7 @@ void loop() {
     }
     
     // Step3-2: if we need to start next action...
-    else{
+    if (T_count > 4){
       MotorWriting(200, 200); // move into the node
       
       for(int i = 0; i < 25; i++) UID_detect(); // UID_detect() needs time, this row gives capability of reading UID in node
@@ -79,7 +86,7 @@ void loop() {
       // determine the next cmd
       if(act == 'f'){
         delay(750);
-        act == 'a';
+        act = 'a';
         continue; // It doesn't need to reset the variable while it's going straight (except act)
       }
       
@@ -123,6 +130,9 @@ void loop() {
       continue; // no need for tracking
     }//end of conduct cmd
     
-    LP_pre = LP;
+    // Step4: set if the next condition is all blank
+    if(Ls == -1) LP_pre = LP_coeff[4];
+    else if(Ls == 1) LP_pre = LP_coeff[0];
+    else LP_pre = LP;
   }
 }
