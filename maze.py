@@ -170,6 +170,29 @@ class Maze:
             route.extend(frag.copy())
         return route
 
+    def BFS_nearest(self, nd):
+        termi = []
+        for N in self.nd_dict:
+            if self.nd_dict[N].isTerminal() and N != nd:
+                termi.append(N)
+        current = nd
+        route = [nd]
+        while len(termi) > 0:
+            short, shortD, target = [], 1000, 0
+            for i in termi:
+                frag = self.BFS_2(current, i)
+                frag.pop(0)
+                if len(frag) < shortD:
+                    short = frag
+                    shortD = len(frag)
+                    print(frag, shortD)
+                    target = i
+            termi.remove(target)
+            current = target
+            route.extend(short.copy())
+            print(route)
+        return route
+
     def routelist(self, total, list = [], current = []):
         if len(current) == total:
             list.append(current.copy())
