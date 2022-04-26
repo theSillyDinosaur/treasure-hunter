@@ -28,6 +28,7 @@ class Node:
                 self.neighborsD.append(-1)
         # store successor as (Node, direction to node, distance)
         self.Successors = [-1]
+        self.terminal = self.isTerminal()
 
     def getIndex(self):
         return self.index

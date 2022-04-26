@@ -13,7 +13,7 @@ import os
 import threading
 
 def main():
-    maze = mz.Maze("data/8*7maze.csv")
+    maze = mz.Maze("data/8*6maze.csv")
     point = score.Scoreboard("data/UID.csv", "得分王者")
     interf = interface.interface()
     # TODO : Initialize necessary variables
@@ -33,6 +33,10 @@ def main():
         print("Mode 1: Self-testing mode.")
         # TODO: You can write your code to test specific function.
         route = maze.BFS_nearest(7)
+        print(route)
+        cmd = maze.route_to_cmd(route)
+        print(cmd, len(cmd))
+        route = maze.BFS_farfirst(7)
         print(route)
         cmd = maze.route_to_cmd(route)
         print(cmd, len(cmd))

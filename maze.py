@@ -185,12 +185,36 @@ class Maze:
                 if len(frag) < shortD:
                     short = frag
                     shortD = len(frag)
-                    print(frag, shortD)
                     target = i
             termi.remove(target)
             current = target
             route.extend(short.copy())
-            print(route)
+        return route
+
+    def BFS_farfirst(self, nd):
+        termi = []
+        for N in self.nd_dict:
+            if self.nd_dict[N].isTerminal() and N != nd:
+                termi.append(N)
+        current = nd
+        route = [nd]
+        far = False
+        while len(termi) > 0:
+            if far == False:
+                short, shortD, target = [], 0, 0
+            else:
+                short, shortD, target = [], 1000, 0
+            for i in termi:
+                frag = self.BFS_2(current, i)
+                frag.pop(0)
+                if (far == True and len(frag) < shortD)or(far == False and len(frag) > shortD):
+                    short = frag
+                    shortD = len(frag)
+                    target = i
+            termi.remove(target)
+            current = target
+            route.extend(short.copy())
+            far = True
         return route
 
     def routelist(self, total, list = [], current = []):
