@@ -35,7 +35,7 @@ void loop() {
   // initialization in every task
   char act = 'a'; // a means empty
   /* vvvvvvvvvv determining the ratio of response, need to modify vvvvvvvvvv */
-  int SI_max = 150, norm_speed = 200;
+  int SI_max = 150, norm_speed = 255;
   int S_ratio = 2, L_ratio = 2, LP_coeff[5] = {norm_speed*2, norm_speed*2/3, 0, -norm_speed*2/3, -norm_speed*2};
   /* ^^^^^^^^^^ determining the ratio of response, need to modify ^^^^^^^^^^ */
   double LP = 0., LP_pre = 0., SI = SI_max / 2, LI = 0.; // initialize - right p, straight i, right i; set straight i to accelerate while being confident
@@ -73,8 +73,8 @@ void loop() {
 
     //step3-1: normal tracking, setting of the MotorWriting()
     if (T_count < 5){
-      if(LI > 0) MotorWriting(SI+norm_speed-LI, SI+norm_speed);
-      else MotorWriting(SI+norm_speed, SI+norm_speed+LI);
+      if(LI > 0) MotorWriting(norm_speed-LI, norm_speed);
+      else MotorWriting(norm_speed, norm_speed+LI);
     }
     
     // Step3-2: if we need to start next action...
@@ -82,33 +82,35 @@ void loop() {
 
       // determine the next cmd
       if(act == 'f'){
-        MotorWriting(200, 200);
-        delay(800);
+        MotorWriting(255, 255);
+        delay(300);
         //act = 'a';
         //continue; // It doesn't need to reset the variable while it's going straight (except act)
       }
       
       else if(act == 'r'){
         MotorWriting(255, 255);
-        delay(350);
-        MotorWriting(250, 0);
+        delay(270);
+        MotorWriting(255, 0);
         delay(400);
-        while(digitalRead(TCRT_digitalPin[1]) == 0 && digitalRead(TCRT_digitalPin[2]) == 0 && digitalRead(TCRT_digitalPin[3]) == 0) delay(10);
+        while(digitalRead(TCRT_digitalPin[4]) == 0 && digitalRead(TCRT_digitalPin[1]) == 0 && digitalRead(TCRT_digitalPin[2]) == 0 && digitalRead(TCRT_digitalPin[3]) == 0) delay(10);
       }
       
       else if(act == 'l'){
         MotorWriting(255, 255);
-        delay(350);
-        MotorWriting(0, 250);
+        delay(270);
+        MotorWriting(0, 255);
         delay(400);
-        while(digitalRead(TCRT_digitalPin[1]) == 0 && digitalRead(TCRT_digitalPin[2]) == 0 && digitalRead(TCRT_digitalPin[3]) == 0) delay(10);
+        while(digitalRead(TCRT_digitalPin[0]) == 0 && digitalRead(TCRT_digitalPin[1]) == 0 && digitalRead(TCRT_digitalPin[2]) == 0 && digitalRead(TCRT_digitalPin[3]) == 0) delay(10);
       }
       
       else if(act == 'b'){
         MotorWriting(255, 255);
-        delay(350);
+        delay(200);
+        MotorWriting(150, -150);
+        delay(500);
+        while(digitalRead(TCRT_digitalPin[4]) == 0) delay(10);
         MotorWriting(100, -100);
-        delay(1000);
         while(digitalRead(TCRT_digitalPin[1]) == 0 && digitalRead(TCRT_digitalPin[2]) == 0 && digitalRead(TCRT_digitalPin[3]) == 0) delay(10);
       }
       else if(act == 'e'){
@@ -120,8 +122,8 @@ void loop() {
       }
       
       // move out of the node
-      MotorWriting(200, 200);
-      delay(150);
+      MotorWriting(255, 255);
+      delay(100);
       
       // reset variable
       act = 'a';

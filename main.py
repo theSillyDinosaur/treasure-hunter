@@ -13,9 +13,12 @@ import os
 import threading
 
 def main():
-    maze = mz.Maze("data/8*6maze.csv")
-    point = score.Scoreboard("data/UID.csv", "得分王者")
+    maze = mz.Maze("data/medium_maze.csv")
     interf = interface.interface()
+    input("Press enter to start.")
+    point = score.Scoreboard("data/UID.csv", "得分王者")
+    interf.ser.SerialWrite('s') # s:開始循跡
+    
     # TODO : Initialize necessary variables
 
     if (sys.argv[1] == '0'):

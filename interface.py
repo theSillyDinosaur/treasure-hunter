@@ -17,8 +17,6 @@ class interface:
                 self.ser.disconnect()
                 quit()
             port = input("PC bluetooth port name: ")
-        input("Press enter to start.")
-        self.ser.SerialWrite('s') # s:開始循跡
 
     def get_UID(self):
         return self.ser.SerialReadByte()
