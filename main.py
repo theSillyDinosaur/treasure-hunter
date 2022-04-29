@@ -17,7 +17,6 @@ def main():
     interf = interface.interface()
     input("Press enter to start.")
     point = score.Scoreboard("data/UID.csv", "得分王者")
-    interf.ser.SerialWrite('s') # s:開始循跡
     
     # TODO : Initialize necessary variables
 
@@ -26,7 +25,7 @@ def main():
         # TODO : for treasure-hunting, which encourages you to hunt as many scores as possible
         route = maze.BFS_overall(1)
         cmd = maze.route_to_cmd(route)
-        interf.ser.SerialWrite(cmd+'e')
+        interf.ser.SerialWrite('s'+cmd+'e')
         print(cmd)
         while True:
             interf.ser.EndlessReadUID(point)

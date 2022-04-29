@@ -41,6 +41,8 @@ void loop() {
   double LP = 0., LP_pre = 0., SI = SI_max / 2, LI = 0.; // initialize - right p, straight i, right i; set straight i to accelerate while being confident
 
   // start tracking
+  MotorWriting(255, 255);
+  delay(100);
   while(act != 'z'){
     // initialization in any loop
     Serial.write(act);
