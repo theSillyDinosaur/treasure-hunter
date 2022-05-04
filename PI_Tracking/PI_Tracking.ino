@@ -36,13 +36,13 @@ void loop() {
   char act = 'a'; // a means empty
   /* vvvvvvvvvv determining the ratio of response, need to modify vvvvvvvvvv */
   int SI_max = 150, norm_speed = 255;
-  int S_ratio = 2, L_ratio = 2, LP_coeff[5] = {norm_speed*2, norm_speed*2/3, 0, -norm_speed*2/3, -norm_speed*2};
+  int S_ratio = 1.5, L_ratio = 2, LP_coeff[5] = {norm_speed*4/3, norm_speed*2/3, 0, -norm_speed*2/3, -norm_speed*4/3};
   /* ^^^^^^^^^^ determining the ratio of response, need to modify ^^^^^^^^^^ */
   double LP = 0., LP_pre = 0., SI = SI_max / 2, LI = 0.; // initialize - right p, straight i, right i; set straight i to accelerate while being confident
 
   // start tracking
   MotorWriting(255, 255);
-  delay(100);
+  delay(300);
   while(act != 'z'){
     // initialization in any loop
     Serial.write(act);
@@ -65,8 +65,8 @@ void loop() {
         LP += LP_coeff[i]; // LP Step1: adding coefficient
         T_count++; // count # of TCRT triggered
         if(i == 2) SI += SI_max/(S_ratio+1); // straight adding
-        if(i == 1) Ls = 1;
-        if(i == 5) Ls = -1;
+        if(i == 0) Ls = 1;
+        if(i == 4) Ls = -1;
       }
     }
     if(T_count == 0) LP = LP_pre;
@@ -85,7 +85,7 @@ void loop() {
       // determine the next cmd
       if(act == 'f'){
         MotorWriting(255, 255);
-        delay(300);
+        delay(400);
         //act = 'a';
         //continue; // It doesn't need to reset the variable while it's going straight (except act)
       }
@@ -109,11 +109,12 @@ void loop() {
       else if(act == 'b'){
         MotorWriting(255, 255);
         delay(200);
-        MotorWriting(150, -150);
-        delay(500);
-        while(digitalRead(TCRT_digitalPin[4]) == 0) delay(10);
-        MotorWriting(100, -100);
-        while(digitalRead(TCRT_digitalPin[1]) == 0 && digitalRead(TCRT_digitalPin[2]) == 0 && digitalRead(TCRT_digitalPin[3]) == 0) delay(10);
+        MotorWriting(255, -255);
+        delay(490);
+        MotorWriting(130, -130);
+        while(digitalRead(TCRT_digitalPin[1]) == 0 && digitalRead(TCRT_digitalPin[2]) == 0 && digitalRead(TCRT_digitalPin[3]) == 0 && digitalRead(TCRT_digitalPin[4]) == 0) delay(10);
+        MotorWriting(255, 255);
+        delay(50);
       }
       else if(act == 'e'){
         MotorWriting(255, -255); // YEAH! -by Jamie Oliver

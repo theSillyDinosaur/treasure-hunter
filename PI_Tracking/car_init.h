@@ -38,7 +38,7 @@ bool UID_detect(){
 }
 
 void MotorWriting(double vL, double vR){
-  vL *= 0.90;
+  vL *= 0.89;
   if(vL > 0){
     digitalWrite(TB_AIN1, HIGH);
     digitalWrite(TB_AIN2, LOW);

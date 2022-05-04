@@ -189,8 +189,8 @@ class Maze:
                 nextD = distance[current[len(current)-2]][current[len(current)-1]]
                 short, shortD = self.BFS_overall2(total, distance, current, currentD+nextD, short, shortD)
                 current.remove(i)
-        if len(current) <= 2:
-            print(current, short, shortD)
+#        if len(current) <= 2:
+#            print(current, short, shortD)
         return short, shortD
 
     def BFS_nearest(self, nd):

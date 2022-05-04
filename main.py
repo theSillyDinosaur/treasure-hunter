@@ -13,7 +13,10 @@ import os
 import threading
 
 def main():
-    maze = mz.Maze("data/maze_8x6_3.csv")
+    maze = mz.Maze("data/medium_maze.csv")
+    route = maze.BFS_overall(1)
+    cmd = maze.route_to_cmd(route)
+    print("command:"+cmd)
     interf = interface.interface()
     input("Press enter to start.")
     point = score.Scoreboard("data/UID.csv", "得分王者")
@@ -23,10 +26,7 @@ def main():
     if (sys.argv[1] == '0'):
         print("Mode 0: for treasure-hunting")
         # TODO : for treasure-hunting, which encourages you to hunt as many scores as possible
-        route = maze.BFS_overall(1)
-        cmd = maze.route_to_cmd(route)
         interf.ser.SerialWrite('s'+cmd+'e')
-        print(cmd)
         while True:
             interf.ser.EndlessReadUID(point)
             
